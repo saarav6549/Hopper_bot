@@ -60,7 +60,7 @@ class BotResponse(BaseModel):
 
 # ── Routes ────────────────────────────────────────────────────────────────────
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def root() -> dict:
     return {"status": "ok", "service": "Hopper Bot"}
 
