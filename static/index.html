@@ -20,30 +20,27 @@
       overflow: hidden;
     }
 
-    /* ── Sky / game background ────────────────────────────────── */
-    .game-bg {
+    /* ── YouTube video background ─────────────────────────────── */
+    .yt-bg {
       position: fixed;
       inset: 0;
-      background:
-        radial-gradient(ellipse at 20% 50%, #1a3a6b 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, #0d2444 0%, transparent 50%),
-        linear-gradient(180deg, #0d1b3e 0%, #1a1a2e 60%, #0a0a0f 100%);
       z-index: 0;
+      overflow: hidden;
+      background: #000;
     }
 
-    /* Pixel stars */
-    .stars {
-      position: fixed; inset: 0; z-index: 0;
-      background-image:
-        radial-gradient(1px 1px at 10% 15%, #fff 0%, transparent 100%),
-        radial-gradient(1px 1px at 30% 40%, #fff 0%, transparent 100%),
-        radial-gradient(1px 1px at 55% 10%, #fff 0%, transparent 100%),
-        radial-gradient(1px 1px at 75% 60%, #fff 0%, transparent 100%),
-        radial-gradient(1px 1px at 90% 25%, #fff 0%, transparent 100%),
-        radial-gradient(1px 1px at 45% 75%, #fff 0%, transparent 100%),
-        radial-gradient(1px 1px at 20% 85%, #fff 0%, transparent 100%),
-        radial-gradient(1px 1px at 65% 45%, #fff 0%, transparent 100%);
-      opacity: 0.6;
+    /* Scale the iframe to always cover the viewport (like background-size: cover) */
+    .yt-bg iframe {
+      position: absolute;
+      top: 50%; left: 50%;
+      /* 16:9 — ensure minimum coverage */
+      width: 100vw;
+      height: 56.25vw;   /* 100vw × (9/16) */
+      min-height: 100vh;
+      min-width: 177.78vh; /* 100vh × (16/9) */
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      border: none;
     }
 
     /* ── Chat window (Roblox bottom-left panel) ───────────────── */
@@ -325,8 +322,13 @@
 </head>
 <body>
 
-<div class="game-bg"></div>
-<div class="stars"></div>
+<div class="yt-bg">
+  <iframe
+    src="https://www.youtube.com/embed/HYGTBrIMhlI?autoplay=1&mute=1&loop=1&playlist=HYGTBrIMhlI&controls=0&showinfo=0&rel=0&iv_load_policy=3&disablekb=1&modestbranding=1"
+    allow="autoplay; encrypted-media"
+    allowfullscreen
+  ></iframe>
+</div>
 
 <div class="chat-window">
 
