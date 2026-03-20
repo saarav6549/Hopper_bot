@@ -52,6 +52,13 @@
       transform: translate(-50%, -50%) scale(1.08);
       pointer-events: none;
       border: none;
+      animation: blurPulse 4s ease-in-out infinite;
+    }
+
+    @keyframes blurPulse {
+      0%   { filter: blur(1px); }
+      50%  { filter: blur(7px); }
+      100% { filter: blur(1px); }
     }
 
     /* ── Chat window ──────────────────────────────────────────── */
@@ -553,17 +560,6 @@
     m.scrollTop = m.scrollHeight;
   }
 
-  // ── Fluctuating blur (1px–7px, truly random intervals) ────────
-  const ytIframe = document.getElementById('yt-iframe');
-
-  function fluctuateBlur() {
-    const blur = (Math.random() * 6 + 1).toFixed(1); // 1.0–7.0px
-    ytIframe.style.filter = `blur(${blur}px)`;
-    const nextDelay = Math.random() * 2000 + 600;     // 600ms–2600ms
-    setTimeout(fluctuateBlur, nextDelay);
-  }
-
-  fluctuateBlur();
 
   // ── Switch UI to Discord mode ──────────────────────────────────
   function activateDiscordMode(username) {
