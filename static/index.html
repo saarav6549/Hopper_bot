@@ -53,9 +53,11 @@
       height: 56.25vw;   /* 100vw × (9/16) */
       min-height: 100vh;
       min-width: 177.78vh; /* 100vh × (16/9) */
-      transform: translate(-50%, -50%);
+      /* Scale up slightly so blur edges don't show */
+      transform: translate(-50%, -50%) scale(1.08);
       pointer-events: none;
       border: none;
+      filter: blur(10px);
     }
 
     /* ── Chat window (Roblox bottom-left panel) ───────────────── */
