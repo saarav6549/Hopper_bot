@@ -14,6 +14,8 @@ GET  /health
 """
 import logging
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 from state import (
@@ -39,6 +41,8 @@ app = FastAPI(
     version="1.0.0",
 )
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 # ── Request / Response models ─────────────────────────────────────────────────
 
@@ -61,8 +65,8 @@ class BotResponse(BaseModel):
 # ── Routes ────────────────────────────────────────────────────────────────────
 
 @app.api_route("/", methods=["GET", "HEAD"])
-def root() -> dict:
-    return {"status": "ok", "service": "Hopper Bot"}
+def root():
+    return FileResponse("static/index.html")
 
 
 @app.get("/health")
