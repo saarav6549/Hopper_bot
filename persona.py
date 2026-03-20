@@ -68,7 +68,7 @@ def get_ai_response(messages: list[dict]) -> str:
     response = openai.chat.completions.create(
         model=GPT_MODEL,
         messages=full_messages,
-        max_tokens=300,
-        temperature=0.85,   # slight randomness for natural child-like variation
+        temperature=0.85,
+        max_completion_tokens=120,
     )
     return response.choices[0].message.content.strip()
