@@ -9,18 +9,22 @@ Two responsibilities:
 import asyncio
 import logging
 
-from telegram import Bot
-from telegram.constants import ParseMode
-
 from config import (
     TELEGRAM_BOT_TOKEN,
     TELEGRAM_OPERATOR_CHAT_ID,
     TELEGRAM_BOT_USERNAME,
+    TELEGRAM_ENABLED,
 )
 
 logger = logging.getLogger(__name__)
 
-_bot = Bot(token=TELEGRAM_BOT_TOKEN)
+if TELEGRAM_ENABLED:
+    from telegram import Bot
+    from telegram.constants import ParseMode
+    _bot = Bot(token=TELEGRAM_BOT_TOKEN)
+else:
+    _bot = None
+    logger.warning("Telegram not configured — operator alerts disabled.")
 
 
 # ── Operator alert ────────────────────────────────────────────────────────────
@@ -61,8 +65,11 @@ def send_operator_alert(
 ) -> None:
     """
     Fire-and-forget Telegram alert to the operator.
-    Safe to call from synchronous code.
+    No-ops silently when Telegram is not configured.
     """
+    if not TELEGRAM_ENABLED:
+        logger.info("Session %s | Platform-switch logged (Telegram alerts disabled).", session_id)
+        return
     try:
         asyncio.get_event_loop().run_until_complete(
             _send_operator_alert(session_id, platform, offender_message)
