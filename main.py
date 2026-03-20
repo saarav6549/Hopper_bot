@@ -12,11 +12,13 @@ POST /session/{session_id}/clear
 GET  /health
     Liveness check.
 """
+import io
 import logging
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel, Field
+import openai
 
 from state import (
     append_message,
@@ -60,6 +62,10 @@ class BotResponse(BaseModel):
     reply: str
     platform_switch_detected: bool
     switch_platform: str | None = None
+
+
+class SpeakRequest(BaseModel):
+    text: str = Field(..., max_length=1000)
 
 
 # ── Routes ────────────────────────────────────────────────────────────────────
@@ -119,6 +125,25 @@ def handle_message(body: IncomingMessage) -> BotResponse:
         platform_switch_detected=detection.detected,
         switch_platform=detection.platform,
     )
+
+
+@app.post("/speak")
+def speak(body: SpeakRequest) -> StreamingResponse:
+    """Convert text to a child-like voice using OpenAI TTS and stream MP3 audio."""
+    from config import OPENAI_API_KEY
+    client = openai.OpenAI(api_key=OPENAI_API_KEY)
+    try:
+        response = client.audio.speech.create(
+            model="tts-1",
+            voice="nova",   # youngest / most neutral sounding OpenAI voice
+            input=body.text,
+            speed=1.1,      # slightly faster — kids talk quickly
+        )
+        audio = io.BytesIO(response.content)
+        return StreamingResponse(audio, media_type="audio/mpeg")
+    except Exception:
+        logger.exception("TTS call failed")
+        raise HTTPException(status_code=502, detail="TTS error.")
 
 
 @app.post("/session/{session_id}/clear", status_code=204)

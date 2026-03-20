@@ -19,455 +19,271 @@
       overflow: hidden;
     }
 
-    /* ── YouTube video background ─────────────────────────────── */
+    /* ── YouTube background ───────────────────────────────────── */
     .yt-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      overflow: hidden;
-      background: #000;
+      position: fixed; inset: 0; z-index: 0; overflow: hidden; background: #000;
     }
-
     .yt-cover {
-      position: absolute;
-      inset: 0;
-      background: #000;
-      z-index: 1;
+      position: absolute; inset: 0; background: #000; z-index: 1;
       animation: uncoverVideo 0.6s ease forwards;
-      animation-delay: 2.5s;
-      opacity: 1;
+      animation-delay: 2.5s; opacity: 1;
     }
-
-    @keyframes uncoverVideo {
-      to { opacity: 0; pointer-events: none; }
-    }
-
+    @keyframes uncoverVideo { to { opacity: 0; pointer-events: none; } }
     .yt-bg iframe {
-      position: absolute;
-      top: 50%; left: 50%;
-      width: 100vw;
-      height: 56.25vw;
-      min-height: 100vh;
-      min-width: 177.78vh;
+      position: absolute; top: 50%; left: 50%;
+      width: 100vw; height: 56.25vw;
+      min-height: 100vh; min-width: 177.78vh;
       transform: translate(-50%, -50%) scale(1.08);
-      pointer-events: none;
-      border: none;
+      pointer-events: none; border: none;
       animation: blurPulse 4s ease-in-out infinite;
     }
-
     @keyframes blurPulse {
-      0%   { filter: blur(1px); }
-      50%  { filter: blur(7px); }
-      100% { filter: blur(1px); }
+      0%  { filter: blur(1px); }
+      50% { filter: blur(7px); }
+      100%{ filter: blur(1px); }
     }
 
     /* ── Chat window ──────────────────────────────────────────── */
     .chat-window {
       position: relative; z-index: 10;
-      width: 420px;
-      max-width: 95vw;
-      display: flex;
-      flex-direction: column;
-      background: rgba(10, 14, 30, 0.88);
-      border: 2px solid rgba(0, 162, 255, 0.35);
+      width: 440px; max-width: 95vw;
+      display: flex; flex-direction: column;
+      background: rgba(10,14,30,0.88);
+      border: 2px solid rgba(0,162,255,0.35);
       border-radius: 6px;
       box-shadow: 0 8px 40px rgba(0,0,0,0.7);
       overflow: hidden;
-      transition: background 0.5s ease, border-color 0.5s ease, border-radius 0.5s ease;
+      transition: background 0.5s, border-color 0.5s, border-radius 0.5s;
     }
 
     /* ── Header ───────────────────────────────────────────────── */
     .chat-header {
-      background: linear-gradient(90deg, #0055d4 0%, #003fa3 100%);
+      background: linear-gradient(90deg, #0055d4, #003fa3);
       padding: 8px 12px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: flex; align-items: center; gap: 10px;
       border-bottom: 1px solid rgba(0,162,255,0.4);
       user-select: none;
-      transition: background 0.5s ease, border-color 0.5s ease;
+      transition: background 0.5s, border-color 0.5s;
     }
-
-    .roblox-logo {
-      font-size: 18px;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: -0.5px;
-      text-transform: uppercase;
-      transition: opacity 0.3s;
-    }
+    .roblox-logo { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -0.5px; text-transform: uppercase; }
     .roblox-logo span { color: #ff3333; }
+    .header-title { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.85); text-transform: uppercase; letter-spacing: 1px; }
+    .header-dot { margin-left: auto; width: 8px; height: 8px; border-radius: 50%; background: #00e676; box-shadow: 0 0 6px #00e676; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-    .header-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: rgba(255,255,255,0.85);
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    /* Voice chat toggle button */
+    .voice-toggle-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+      color: rgba(255,255,255,0.7);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 3px 7px;
+      transition: all 0.2s;
+      display: flex; align-items: center; gap: 4px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
     }
+    .voice-toggle-btn:hover { background: rgba(255,255,255,0.18); color: #fff; }
+    .voice-toggle-btn.active { background: rgba(0,230,118,0.2); border-color: #00e676; color: #00e676; }
 
-    .header-dot {
-      margin-left: auto;
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: #00e676;
-      box-shadow: 0 0 6px #00e676;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.4; }
-    }
-
-    /* ── Discord DM header elements (hidden by default) ───────── */
-    .discord-header-content {
-      display: none;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-    }
-
-    .discord-dm-avatar {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      background: #5865f2;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 800; color: #fff;
-      flex-shrink: 0;
-    }
-
+    /* Discord header */
+    .discord-header-content { display: none; align-items: center; gap: 10px; width: 100%; }
+    .discord-dm-avatar { width: 28px; height: 28px; border-radius: 50%; background: #5865f2; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff; flex-shrink: 0; }
     .discord-dm-info { display: flex; flex-direction: column; line-height: 1.2; }
     .discord-dm-name { font-size: 14px; font-weight: 800; color: #fff; }
     .discord-dm-status { font-size: 10px; color: #00e676; font-weight: 600; }
+    .discord-hash { font-size: 20px; color: rgba(255,255,255,0.5); margin-right: 2px; }
 
-    .discord-hash {
-      font-size: 20px;
-      color: rgba(255,255,255,0.5);
-      margin-right: 2px;
-    }
-
-    /* ── Message list ─────────────────────────────────────────── */
-    .messages {
-      flex: 1;
-      height: 380px;
-      overflow-y: auto;
-      padding: 12px 10px;
-      display: flex;
+    /* ── Voice chat panel ─────────────────────────────────────── */
+    .voice-panel {
+      display: none;
+      background: rgba(0,0,0,0.6);
+      border-bottom: 1px solid rgba(0,230,118,0.2);
+      padding: 10px 12px;
       flex-direction: column;
-      gap: 6px;
-      scroll-behavior: smooth;
-      transition: background 0.5s ease;
+      gap: 8px;
+      animation: fadeUp 0.3s ease;
+    }
+    .voice-panel.active { display: flex; }
+
+    .voice-status-bar {
+      display: flex; align-items: center; gap: 8px;
     }
 
+    .voice-live-badge {
+      background: #00e676; color: #000;
+      font-size: 9px; font-weight: 800;
+      padding: 2px 6px; border-radius: 3px;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .voice-live-badge.muted { background: #ff4444; color: #fff; }
+
+    .voice-user-icon {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; position: relative; flex-shrink: 0;
+    }
+    .voice-user-icon.speaking::after {
+      content: '';
+      position: absolute; inset: -3px;
+      border-radius: 50%;
+      border: 2px solid #00e676;
+      animation: speakRing 1s ease-in-out infinite;
+    }
+    @keyframes speakRing {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.4; transform: scale(1.15); }
+    }
+
+    .voice-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.7); flex: 1; }
+
+    /* Controls */
+    .voice-controls { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+
+    .vc-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 4px; color: #fff;
+      cursor: pointer; font-size: 13px;
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    .vc-btn:hover { background: rgba(255,255,255,0.18); }
+    .vc-btn.muted-btn { background: rgba(255,68,68,0.2); border-color: rgba(255,68,68,0.4); color: #ff6666; }
+
+    .volume-display {
+      font-size: 10px; font-weight: 700;
+      color: rgba(255,255,255,0.5); min-width: 28px; text-align: center;
+    }
+
+    /* Transcript box */
+    .voice-transcript {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(0,230,118,0.15);
+      border-radius: 4px;
+      padding: 7px 10px;
+      min-height: 36px;
+      font-size: 12px; font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.5;
+      font-style: italic;
+    }
+    .voice-transcript .interim { color: rgba(255,255,255,0.35); }
+    .voice-transcript .final   { color: rgba(255,255,255,0.75); font-style: normal; }
+    .voice-transcript .label   { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: rgba(0,230,118,0.6); font-style: normal; display: block; margin-bottom: 3px; }
+
+    /* Amit transcript (TTS output shown) */
+    .amit-transcript {
+      background: rgba(0,162,255,0.08);
+      border: 1px solid rgba(0,162,255,0.15);
+      border-radius: 4px;
+      padding: 7px 10px;
+      font-size: 12px; font-weight: 600;
+      color: rgba(208,238,255,0.7);
+      line-height: 1.5;
+      display: none;
+    }
+    .amit-transcript.visible { display: block; }
+    .amit-transcript .label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: rgba(0,180,255,0.6); display: block; margin-bottom: 3px; }
+
+    /* ── Messages ─────────────────────────────────────────────── */
+    .messages {
+      flex: 1; height: 340px; overflow-y: auto;
+      padding: 12px 10px; display: flex;
+      flex-direction: column; gap: 6px; scroll-behavior: smooth;
+      transition: background 0.5s;
+    }
     .messages::-webkit-scrollbar { width: 4px; }
     .messages::-webkit-scrollbar-track { background: transparent; }
     .messages::-webkit-scrollbar-thumb { background: rgba(0,162,255,0.3); border-radius: 2px; }
 
-    /* ── Roblox message rows ──────────────────────────────────── */
-    .msg-row {
-      display: flex;
-      flex-direction: column;
-      max-width: 85%;
-      animation: fadeUp 0.2s ease;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
+    .msg-row { display: flex; flex-direction: column; max-width: 85%; animation: fadeUp 0.2s ease; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
     .msg-row.user   { align-self: flex-end;   align-items: flex-end; }
     .msg-row.amit   { align-self: flex-start; align-items: flex-start; }
     .msg-row.system { align-self: center;     align-items: center; }
-
-    .msg-name {
-      font-size: 10px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.8px;
-      margin-bottom: 3px; opacity: 0.85;
-    }
-
+    .msg-name { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 3px; opacity: 0.85; }
     .msg-row.user .msg-name { color: #ffb347; }
     .msg-row.amit .msg-name { color: #00b4ff; }
+    .msg-bubble { padding: 7px 11px; border-radius: 4px; font-size: 13px; font-weight: 600; line-height: 1.5; word-break: break-word; }
+    .msg-row.user .msg-bubble { background: rgba(255,179,71,0.18); border: 1px solid rgba(255,179,71,0.35); color: #ffe9c4; border-radius: 4px 4px 0 4px; }
+    .msg-row.amit .msg-bubble { background: rgba(0,162,255,0.15); border: 1px solid rgba(0,162,255,0.35); color: #d0eeff; border-radius: 4px 4px 4px 0; }
+    .msg-row.system .msg-bubble { background: rgba(255,50,50,0.12); border: 1px solid rgba(255,50,50,0.3); color: #ff9999; font-size: 11px; font-weight: 600; text-align: center; border-radius: 4px; }
+    .msg-time { font-size: 9px; color: rgba(255,255,255,0.3); margin-top: 2px; font-weight: 600; }
 
-    .msg-bubble {
-      padding: 7px 11px;
-      border-radius: 4px;
-      font-size: 13px; font-weight: 600;
-      line-height: 1.5; word-break: break-word;
-    }
-
-    .msg-row.user .msg-bubble {
-      background: rgba(255,179,71,0.18);
-      border: 1px solid rgba(255,179,71,0.35);
-      color: #ffe9c4;
-      border-radius: 4px 4px 0 4px;
-    }
-
-    .msg-row.amit .msg-bubble {
-      background: rgba(0,162,255,0.15);
-      border: 1px solid rgba(0,162,255,0.35);
-      color: #d0eeff;
-      border-radius: 4px 4px 4px 0;
-    }
-
-    .msg-row.system .msg-bubble {
-      background: rgba(255,50,50,0.12);
-      border: 1px solid rgba(255,50,50,0.3);
-      color: #ff9999;
-      font-size: 11px; font-weight: 600;
-      text-align: center; border-radius: 4px;
-    }
-
-    .msg-time {
-      font-size: 9px; color: rgba(255,255,255,0.3);
-      margin-top: 2px; font-weight: 600;
-    }
-
-    /* ── Discord-style message rows ───────────────────────────── */
-    .msg-row.discord-row {
-      max-width: 100%;
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 10px;
-      align-self: flex-start;
-      padding: 2px 4px;
-      border-radius: 4px;
-    }
-
+    /* Discord rows */
+    .msg-row.discord-row { max-width: 100%; flex-direction: row; align-items: flex-start; gap: 10px; align-self: flex-start; padding: 2px 4px; border-radius: 4px; }
     .msg-row.discord-row:hover { background: rgba(0,0,0,0.1); }
-
-    .dc-avatar {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px; font-weight: 800; color: #fff;
-      margin-top: 2px;
-    }
-
-    .dc-avatar.user-av  { background: #e67e22; }
-    .dc-avatar.amit-av  { background: #5865f2; }
-
+    .dc-avatar { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; color: #fff; margin-top: 2px; }
+    .dc-avatar.user-av { background: #e67e22; }
+    .dc-avatar.amit-av { background: #5865f2; }
     .dc-body { display: flex; flex-direction: column; flex: 1; }
-
-    .dc-meta {
-      display: flex; align-items: baseline; gap: 8px;
-      margin-bottom: 2px;
-    }
-
-    .dc-name {
-      font-size: 14px; font-weight: 800;
-    }
-
-    .dc-name.user-dc  { color: #e67e22; }
-    .dc-name.amit-dc  { color: #5865f2; }
-
-    .dc-time {
-      font-size: 10px; color: rgba(255,255,255,0.3); font-weight: 600;
-    }
-
-    .dc-text {
-      font-size: 14px; color: #dcddde;
-      font-weight: 600; line-height: 1.5;
-      word-break: break-word;
-    }
+    .dc-meta { display: flex; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+    .dc-name { font-size: 14px; font-weight: 800; }
+    .dc-name.user-dc { color: #e67e22; }
+    .dc-name.amit-dc { color: #5865f2; }
+    .dc-time { font-size: 10px; color: rgba(255,255,255,0.3); font-weight: 600; }
+    .dc-text { font-size: 14px; color: #dcddde; font-weight: 600; line-height: 1.5; word-break: break-word; }
 
     /* ── Typing indicator ─────────────────────────────────────── */
-    .typing-indicator {
-      display: none;
-      align-self: flex-start;
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 3px;
-      padding: 4px 10px;
-    }
-
+    .typing-indicator { display: none; align-self: flex-start; align-items: flex-start; flex-direction: column; gap: 3px; padding: 4px 10px; }
     .typing-indicator.visible { display: flex; }
-
-    .typing-name {
-      font-size: 10px; font-weight: 700;
-      color: #00b4ff;
-      text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.85;
-    }
-
-    .typing-dots {
-      display: flex; gap: 4px;
-      padding: 8px 12px;
-      background: rgba(0,162,255,0.12);
-      border: 1px solid rgba(0,162,255,0.3);
-      border-radius: 4px 4px 4px 0;
-    }
-
-    .typing-dots span {
-      width: 5px; height: 5px;
-      background: #00b4ff; border-radius: 50%;
-      animation: bounce 1.2s infinite;
-    }
-
+    .typing-name { font-size: 10px; font-weight: 700; color: #00b4ff; text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.85; }
+    .typing-dots { display: flex; gap: 4px; padding: 8px 12px; background: rgba(0,162,255,0.12); border: 1px solid rgba(0,162,255,0.3); border-radius: 4px 4px 4px 0; }
+    .typing-dots span { width: 5px; height: 5px; background: #00b4ff; border-radius: 50%; animation: bounce 1.2s infinite; }
     .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
     .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes bounce {
-      0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
-      40%            { transform: translateY(-5px); opacity: 1; }
-    }
-
-    /* Discord typing indicator override */
-    .discord-mode .typing-dots {
-      background: rgba(88,101,242,0.15);
-      border-color: rgba(88,101,242,0.3);
-    }
-    .discord-mode .typing-dots span { background: #5865f2; }
-    .discord-mode .typing-name { color: #5865f2; }
+    @keyframes bounce { 0%,80%,100%{transform:translateY(0);opacity:0.4} 40%{transform:translateY(-5px);opacity:1} }
 
     /* ── Alert banner ─────────────────────────────────────────── */
-    .alert-banner {
-      display: none;
-      background: rgba(255,30,30,0.2);
-      border-top: 1px solid rgba(255,30,30,0.4);
-      border-bottom: 1px solid rgba(255,30,30,0.4);
-      color: #ff7070;
-      font-size: 11px; font-weight: 700;
-      text-align: center; padding: 5px;
-      text-transform: uppercase; letter-spacing: 1px;
-    }
-
+    .alert-banner { display: none; background: rgba(255,30,30,0.2); border-top: 1px solid rgba(255,30,30,0.4); border-bottom: 1px solid rgba(255,30,30,0.4); color: #ff7070; font-size: 11px; font-weight: 700; text-align: center; padding: 5px; text-transform: uppercase; letter-spacing: 1px; }
     .alert-banner.visible { display: block; }
 
     /* ── Username bar ─────────────────────────────────────────── */
-    .username-bar {
-      background: rgba(0,0,0,0.4);
-      border-top: 1px solid rgba(0,162,255,0.15);
-      padding: 6px 10px;
-      display: flex; align-items: center; gap: 8px;
-      font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 700;
-      transition: background 0.5s, border-color 0.5s;
-    }
-
-    .username-bar input {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 3px;
-      color: #ffb347;
-      font-family: 'Nunito', sans-serif;
-      font-weight: 700; font-size: 12px;
-      padding: 3px 7px; width: 120px; outline: none;
-    }
-
+    .username-bar { background: rgba(0,0,0,0.4); border-top: 1px solid rgba(0,162,255,0.15); padding: 6px 10px; display: flex; align-items: center; gap: 8px; font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 700; transition: background 0.5s, border-color 0.5s; }
+    .username-bar input { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 3px; color: #ffb347; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 12px; padding: 3px 7px; width: 120px; outline: none; }
     .username-bar input:focus { border-color: rgba(255,179,71,0.5); }
 
     /* ── Input area ───────────────────────────────────────────── */
-    .input-area {
-      display: flex;
-      border-top: 1px solid rgba(0,162,255,0.2);
-      background: rgba(0,0,0,0.5);
-      transition: background 0.5s, border-color 0.5s;
-    }
-
-    .chat-input {
-      flex: 1; background: transparent; border: none; outline: none;
-      padding: 10px 12px; color: #e0e0e0;
-      font-family: 'Nunito', sans-serif;
-      font-size: 13px; font-weight: 600; caret-color: #00b4ff;
-      transition: caret-color 0.5s;
-    }
-
+    .input-area { display: flex; border-top: 1px solid rgba(0,162,255,0.2); background: rgba(0,0,0,0.5); transition: background 0.5s, border-color 0.5s; }
+    .chat-input { flex: 1; background: transparent; border: none; outline: none; padding: 10px 12px; color: #e0e0e0; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 600; caret-color: #00b4ff; transition: caret-color 0.5s; }
     .chat-input::placeholder { color: rgba(255,255,255,0.25); }
-
-    .send-btn {
-      background: linear-gradient(135deg, #0055d4, #003fa3);
-      border: none; color: #fff;
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800; font-size: 12px;
-      padding: 0 16px; cursor: pointer;
-      text-transform: uppercase; letter-spacing: 1px;
-      transition: background 0.15s;
-      border-left: 1px solid rgba(0,162,255,0.2);
-    }
-
-    .send-btn:hover   { background: linear-gradient(135deg, #0066ff, #0050c8); }
-    .send-btn:active  { background: #002f80; }
+    .send-btn { background: linear-gradient(135deg, #0055d4, #003fa3); border: none; color: #fff; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 12px; padding: 0 16px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: background 0.15s; border-left: 1px solid rgba(0,162,255,0.2); }
+    .send-btn:hover { background: linear-gradient(135deg, #0066ff, #0050c8); }
+    .send-btn:active { background: #002f80; }
     .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
     /* ════════════════════════════════════════════════════════════
-       DISCORD MODE OVERRIDES
+       DISCORD MODE
     ════════════════════════════════════════════════════════════ */
-    .chat-window.discord-mode {
-      background: rgba(49, 51, 56, 0.97);
-      border-color: rgba(88,101,242,0.4);
-      border-radius: 8px;
-    }
-
-    .discord-mode .chat-header {
-      background: #2b2d31;
-      border-bottom-color: rgba(255,255,255,0.06);
-      padding: 10px 14px;
-    }
-
+    .chat-window.discord-mode { background: rgba(49,51,56,0.97); border-color: rgba(88,101,242,0.4); border-radius: 8px; }
+    .discord-mode .chat-header { background: #2b2d31; border-bottom-color: rgba(255,255,255,0.06); padding: 10px 14px; }
     .discord-mode .roblox-logo { display: none; }
     .discord-mode .header-title { display: none; }
+    .discord-mode .voice-toggle-btn { border-color: rgba(88,101,242,0.3); }
     .discord-mode .discord-header-content { display: flex; }
-
-    .discord-mode .messages {
-      background: #313338;
-      gap: 2px;
-      padding: 16px 12px;
-    }
-
-    .discord-mode .messages::-webkit-scrollbar-thumb {
-      background: rgba(88,101,242,0.4);
-    }
-
-    .discord-mode .username-bar {
-      background: #2b2d31;
-      border-top-color: rgba(255,255,255,0.06);
-    }
-
+    .discord-mode .messages { background: #313338; gap: 2px; padding: 16px 12px; }
+    .discord-mode .messages::-webkit-scrollbar-thumb { background: rgba(88,101,242,0.4); }
+    .discord-mode .username-bar { background: #2b2d31; border-top-color: rgba(255,255,255,0.06); }
     .discord-mode .username-bar input { color: #fff; }
-
-    .discord-mode .input-area {
-      background: #383a40;
-      border-top: none;
-      padding: 6px 10px;
-    }
-
-    .discord-mode .chat-input {
-      background: #383a40;
-      border-radius: 8px;
-      padding: 8px 12px;
-      color: #dcddde;
-      caret-color: #5865f2;
-    }
-
-    .discord-mode .send-btn {
-      background: #5865f2;
-      border-left: none;
-      border-radius: 6px;
-      margin: 2px 0 2px 6px;
-    }
-
+    .discord-mode .input-area { background: #383a40; border-top: none; padding: 6px 10px; }
+    .discord-mode .chat-input { background: #383a40; border-radius: 8px; padding: 8px 12px; color: #dcddde; caret-color: #5865f2; }
+    .discord-mode .send-btn { background: #5865f2; border-left: none; border-radius: 6px; margin: 2px 0 2px 6px; }
     .discord-mode .send-btn:hover { background: #4752c4; }
-
-    /* Hide Roblox-style bubbles in discord mode, show discord rows */
     .discord-mode .msg-row:not(.discord-row) { display: none; }
+    .discord-mode .voice-panel { border-color: rgba(88,101,242,0.2); }
+    .discord-mode .typing-dots { background: rgba(88,101,242,0.15); border-color: rgba(88,101,242,0.3); }
+    .discord-mode .typing-dots span { background: #5865f2; }
+    .discord-mode .typing-name { color: #5865f2; }
 
-    /* ── Flash transition overlay ─────────────────────────────── */
-    .switch-flash {
-      position: fixed; inset: 0; z-index: 100;
-      background: #fff;
-      pointer-events: none;
-      opacity: 0;
-    }
-
-    .switch-flash.active {
-      animation: flashOut 0.5s ease forwards;
-    }
-
-    @keyframes flashOut {
-      0%   { opacity: 0.6; }
-      100% { opacity: 0; }
-    }
+    /* ── Flash transition ─────────────────────────────────────── */
+    .switch-flash { position: fixed; inset: 0; z-index: 100; background: #fff; pointer-events: none; opacity: 0; }
+    .switch-flash.active { animation: flashOut 0.5s ease forwards; }
+    @keyframes flashOut { 0%{opacity:0.6} 100%{opacity:0} }
   </style>
 </head>
 <body>
@@ -482,19 +298,23 @@
   <div class="yt-cover"></div>
 </div>
 
-<!-- Flash overlay for platform-switch transition -->
 <div class="switch-flash" id="switch-flash"></div>
 
 <div class="chat-window" id="chat-window">
 
   <!-- Header -->
-  <div class="chat-header" id="chat-header">
-    <!-- Roblox header -->
+  <div class="chat-header">
     <div class="roblox-logo">R<span>O</span>BLOX</div>
     <div class="header-title">Chat</div>
+
+    <!-- Voice toggle -->
+    <button class="voice-toggle-btn" id="voice-toggle-btn" onclick="toggleVoiceChat()">
+      🎤 Voice Chat
+    </button>
+
     <div class="header-dot"></div>
 
-    <!-- Discord DM header (hidden until switch) -->
+    <!-- Discord DM header -->
     <div class="discord-header-content">
       <span class="discord-hash">@</span>
       <div class="dc-avatar amit-av">A</div>
@@ -503,6 +323,36 @@
         <span class="discord-dm-status">● Online</span>
       </div>
     </div>
+  </div>
+
+  <!-- Voice chat panel -->
+  <div class="voice-panel" id="voice-panel">
+
+    <!-- Status bar -->
+    <div class="voice-status-bar">
+      <div class="voice-user-icon" id="voice-user-icon">🎤</div>
+      <span class="voice-live-badge" id="voice-live-badge">LIVE</span>
+      <span class="voice-label" id="voice-label">Proximity Voice Chat — listening…</span>
+      <div class="voice-controls">
+        <button class="vc-btn" id="vol-down-btn" onclick="changeVolume(-10)" title="Volume down">🔉</button>
+        <span class="volume-display" id="volume-display">80%</span>
+        <button class="vc-btn" id="vol-up-btn" onclick="changeVolume(10)" title="Volume up">🔊</button>
+        <button class="vc-btn" id="mute-btn" onclick="toggleMute()" title="Mute/Unmute">🎙️</button>
+      </div>
+    </div>
+
+    <!-- Real-time transcript of predator speech -->
+    <div class="voice-transcript" id="voice-transcript">
+      <span class="label">🎤 You (live)</span>
+      <span id="transcript-text" class="interim">Start speaking…</span>
+    </div>
+
+    <!-- Amit's spoken reply transcript -->
+    <div class="amit-transcript" id="amit-transcript">
+      <span class="label">🔊 Amit_Rblx (speaking)</span>
+      <span id="amit-transcript-text"></span>
+    </div>
+
   </div>
 
   <!-- Messages -->
@@ -515,9 +365,7 @@
   <!-- Typing indicator -->
   <div class="typing-indicator" id="typing">
     <div class="typing-name" id="typing-name">Amit_Rblx</div>
-    <div class="typing-dots">
-      <span></span><span></span><span></span>
-    </div>
+    <div class="typing-dots"><span></span><span></span><span></span></div>
   </div>
 
   <!-- Alert banner -->
@@ -533,62 +381,225 @@
 
   <!-- Input -->
   <div class="input-area">
-    <input
-      class="chat-input"
-      id="chat-input"
-      type="text"
-      placeholder="Say something..."
-      maxlength="500"
-      autocomplete="off"
-    />
+    <input class="chat-input" id="chat-input" type="text" placeholder="Say something…" maxlength="500" autocomplete="off" />
     <button class="send-btn" id="send-btn" onclick="sendMessage()">Send</button>
   </div>
 
 </div>
 
 <script>
-  const SESSION_ID = 'session_' + Math.random().toString(36).slice(2, 10);
-  const API_BASE   = '';
+  /* ── State ────────────────────────────────────────────────────── */
+  const SESSION_ID  = 'session_' + Math.random().toString(36).slice(2, 10);
+  const API_BASE    = '';
   let   discordMode = false;
+  let   voiceActive = false;
+  let   muted       = false;
+  let   volume      = 80;          // 0-100
+  let   recognition = null;
+  let   currentAudio = null;
+  let   autoSendTimer = null;
 
+  /* ── Helpers ──────────────────────────────────────────────────── */
   function now() {
     return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
-
   function scrollBottom() {
     const m = document.getElementById('messages');
     m.scrollTop = m.scrollHeight;
   }
 
+  /* ════════════════════════════════════════════════════════════════
+     VOICE CHAT
+  ════════════════════════════════════════════════════════════════ */
+  function toggleVoiceChat() {
+    voiceActive = !voiceActive;
+    const btn   = document.getElementById('voice-toggle-btn');
+    const panel = document.getElementById('voice-panel');
 
-  // ── Switch UI to Discord mode ──────────────────────────────────
+    if (voiceActive) {
+      btn.classList.add('active');
+      btn.textContent = '🎤 Voice ON';
+      panel.classList.add('active');
+      if (!muted) startRecognition();
+    } else {
+      btn.classList.remove('active');
+      btn.textContent = '🎤 Voice Chat';
+      panel.classList.remove('active');
+      stopRecognition();
+    }
+  }
+
+  function toggleMute() {
+    muted = !muted;
+    const muteBtn  = document.getElementById('mute-btn');
+    const badge    = document.getElementById('voice-live-badge');
+    const label    = document.getElementById('voice-label');
+    const icon     = document.getElementById('voice-user-icon');
+    const transcript = document.getElementById('transcript-text');
+
+    if (muted) {
+      muteBtn.textContent = '🔇';
+      muteBtn.classList.add('muted-btn');
+      badge.textContent = 'MUTED';
+      badge.classList.add('muted');
+      label.textContent = 'Proximity Voice Chat — muted';
+      icon.classList.remove('speaking');
+      transcript.textContent = '— muted —';
+      transcript.className = 'interim';
+      stopRecognition();
+    } else {
+      muteBtn.textContent = '🎙️';
+      muteBtn.classList.remove('muted-btn');
+      badge.textContent = 'LIVE';
+      badge.classList.remove('muted');
+      label.textContent = 'Proximity Voice Chat — listening…';
+      transcript.textContent = 'Start speaking…';
+      if (voiceActive) startRecognition();
+    }
+  }
+
+  function changeVolume(delta) {
+    volume = Math.max(0, Math.min(100, volume + delta));
+    document.getElementById('volume-display').textContent = volume + '%';
+    if (currentAudio) currentAudio.volume = volume / 100;
+  }
+
+  /* ── Web Speech API recognition ──────────────────────────────── */
+  function startRecognition() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) {
+      document.getElementById('voice-label').textContent = 'Speech recognition not supported in this browser';
+      return;
+    }
+
+    recognition = new SR();
+    recognition.continuous    = true;
+    recognition.interimResults = true;
+    recognition.lang          = 'en-US';
+
+    recognition.onstart = () => {
+      document.getElementById('voice-label').textContent = 'Proximity Voice Chat — listening…';
+    };
+
+    recognition.onresult = (event) => {
+      const icon = document.getElementById('voice-user-icon');
+      icon.classList.add('speaking');
+
+      let interim = '';
+      let finalText = '';
+
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const t = event.results[i][0].transcript;
+        if (event.results[i].isFinal) finalText += t;
+        else interim += t;
+      }
+
+      const el = document.getElementById('transcript-text');
+
+      if (finalText) {
+        el.textContent = finalText;
+        el.className = 'final';
+        icon.classList.remove('speaking');
+
+        // Auto-send after short pause (debounce)
+        clearTimeout(autoSendTimer);
+        autoSendTimer = setTimeout(() => {
+          sendVoiceMessage(finalText.trim());
+          el.textContent = 'Start speaking…';
+          el.className = 'interim';
+        }, 900);
+      } else {
+        el.textContent = interim;
+        el.className = 'interim';
+      }
+    };
+
+    recognition.onerror = (e) => {
+      if (e.error !== 'no-speech') console.warn('Speech error:', e.error);
+    };
+
+    // Auto-restart on end (keep alive)
+    recognition.onend = () => {
+      if (voiceActive && !muted) {
+        try { recognition.start(); } catch (_) {}
+      }
+    };
+
+    try { recognition.start(); } catch (_) {}
+  }
+
+  function stopRecognition() {
+    if (recognition) {
+      try { recognition.stop(); } catch (_) {}
+      recognition = null;
+    }
+  }
+
+  /* ── Send voice-captured message ──────────────────────────────── */
+  function sendVoiceMessage(text) {
+    if (!text) return;
+    const username = document.getElementById('username-input').value.trim() || 'Player1234';
+    // Populate text input and send normally
+    document.getElementById('chat-input').value = text;
+    sendMessage();
+  }
+
+  /* ── TTS: speak Amit's reply ──────────────────────────────────── */
+  async function speakReply(text) {
+    // Show transcript
+    const amitBox = document.getElementById('amit-transcript');
+    const amitText = document.getElementById('amit-transcript-text');
+    amitBox.classList.add('visible');
+    amitText.textContent = text;
+
+    try {
+      const res = await fetch(`${API_BASE}/speak`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      });
+
+      if (!res.ok) throw new Error('TTS failed');
+
+      const blob = await res.blob();
+      const url  = URL.createObjectURL(blob);
+      currentAudio = new Audio(url);
+      currentAudio.volume = volume / 100;
+      currentAudio.onended = () => {
+        URL.revokeObjectURL(url);
+        currentAudio = null;
+        amitBox.classList.remove('visible');
+      };
+      currentAudio.play();
+    } catch (err) {
+      console.warn('TTS error:', err);
+      setTimeout(() => amitBox.classList.remove('visible'), 3000);
+    }
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     CHAT
+  ════════════════════════════════════════════════════════════════ */
   async function activateDiscordMode(username) {
     if (discordMode) return;
     discordMode = true;
 
-    // Clear backend session history so Discord chat starts fresh
     try {
       await fetch(`${API_BASE}/session/${SESSION_ID}/clear`, { method: 'POST' });
-    } catch (_) { /* non-critical */ }
+    } catch (_) {}
 
-    // Flash
     const flash = document.getElementById('switch-flash');
     flash.classList.add('active');
     setTimeout(() => flash.classList.remove('active'), 500);
 
-    // Transform chat window
     document.getElementById('chat-window').classList.add('discord-mode');
     document.getElementById('chat-input').placeholder = 'Message @am1t_rblx';
     document.getElementById('typing-name').textContent = 'am1t_rblx';
 
-    // Wipe all messages — start Discord chat completely fresh
-    const container = document.getElementById('messages');
-    container.innerHTML = '';
-
+    document.getElementById('messages').innerHTML = '';
     scrollBottom();
   }
 
-  // ── Append Roblox-style message ────────────────────────────────
   function appendRobloxMessage(role, name, text) {
     const container = document.getElementById('messages');
     const row = document.createElement('div');
@@ -615,16 +626,14 @@
     scrollBottom();
   }
 
-  // ── Append Discord-style message ───────────────────────────────
-  function appendDiscordMessage(role, name, text, timestamp) {
+  function appendDiscordMessage(role, name, text) {
     const container = document.getElementById('messages');
     const row = document.createElement('div');
-    row.className = `msg-row discord-row`;
+    row.className = 'msg-row discord-row';
 
-    const initial = name.charAt(0).toUpperCase();
-    const avatar  = document.createElement('div');
+    const avatar = document.createElement('div');
     avatar.className = `dc-avatar ${role === 'amit' ? 'amit-av' : 'user-av'}`;
-    avatar.textContent = initial;
+    avatar.textContent = name.charAt(0).toUpperCase();
     row.appendChild(avatar);
 
     const body = document.createElement('div');
@@ -632,17 +641,13 @@
 
     const meta = document.createElement('div');
     meta.className = 'dc-meta';
-
     const nameEl = document.createElement('span');
     nameEl.className = `dc-name ${role === 'amit' ? 'amit-dc' : 'user-dc'}`;
     nameEl.textContent = role === 'amit' ? 'am1t_rblx' : name;
-    meta.appendChild(nameEl);
-
     const timeEl = document.createElement('span');
     timeEl.className = 'dc-time';
-    timeEl.textContent = 'Today at ' + (timestamp || now());
-    meta.appendChild(timeEl);
-
+    timeEl.textContent = 'Today at ' + now();
+    meta.appendChild(nameEl); meta.appendChild(timeEl);
     body.appendChild(meta);
 
     const textEl = document.createElement('div');
@@ -655,20 +660,15 @@
     scrollBottom();
   }
 
-  // ── Unified append ─────────────────────────────────────────────
   function appendMessage(role, name, text) {
-    if (discordMode) {
-      appendDiscordMessage(role, name, text);
-    } else {
-      appendRobloxMessage(role, name, text);
-    }
+    if (discordMode) appendDiscordMessage(role, name, text);
+    else             appendRobloxMessage(role, name, text);
   }
 
-  // ── Send message ───────────────────────────────────────────────
   async function sendMessage() {
-    const input    = document.getElementById('chat-input');
-    const sendBtn  = document.getElementById('send-btn');
-    const typing   = document.getElementById('typing');
+    const input   = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+    const typing  = document.getElementById('typing');
     const username = document.getElementById('username-input').value.trim() || 'Player1234';
     const text     = input.value.trim();
 
@@ -694,16 +694,13 @@
       const data = await res.json();
 
       if (data.platform_switch_detected && !discordMode) {
-        // 1. Show alert banner
         document.getElementById('alert-banner').classList.add('visible');
-
-        // 2. Show Amit's reply in the current Roblox chat
         appendRobloxMessage('amit', 'Amit_Rblx', data.reply);
-
-        // 3. After a beat, wipe everything and switch to Discord
+        if (voiceActive) speakReply(data.reply);
         setTimeout(() => activateDiscordMode(username), 2000);
       } else {
         appendMessage('amit', 'am1t_rblx', data.reply);
+        if (voiceActive) speakReply(data.reply);
       }
 
     } catch (err) {
@@ -716,10 +713,7 @@
   }
 
   document.getElementById('chat-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   });
 </script>
 </body>
