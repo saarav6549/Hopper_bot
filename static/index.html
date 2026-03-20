@@ -29,6 +29,21 @@
       background: #000;
     }
 
+    /* Black cover that fades out once the video has started */
+    .yt-cover {
+      position: absolute;
+      inset: 0;
+      background: #000;
+      z-index: 1;
+      animation: uncoverVideo 0.6s ease forwards;
+      animation-delay: 2.5s;
+      opacity: 1;
+    }
+
+    @keyframes uncoverVideo {
+      to { opacity: 0; pointer-events: none; }
+    }
+
     /* Scale the iframe to always cover the viewport (like background-size: cover) */
     .yt-bg iframe {
       position: absolute;
@@ -328,6 +343,7 @@
     allow="autoplay; encrypted-media"
     allowfullscreen
   ></iframe>
+  <div class="yt-cover"></div>
 </div>
 
 <div class="chat-window">
