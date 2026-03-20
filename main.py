@@ -60,6 +60,11 @@ class BotResponse(BaseModel):
 
 # ── Routes ────────────────────────────────────────────────────────────────────
 
+@app.get("/")
+def root() -> dict:
+    return {"status": "ok", "service": "Hopper Bot"}
+
+
 @app.get("/health")
 def health() -> dict:
     return {"status": "ok"}
