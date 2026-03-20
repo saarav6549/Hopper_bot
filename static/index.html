@@ -562,9 +562,14 @@
 
 
   // ── Switch UI to Discord mode ──────────────────────────────────
-  function activateDiscordMode(username) {
+  async function activateDiscordMode(username) {
     if (discordMode) return;
     discordMode = true;
+
+    // Clear backend session history so Discord chat starts fresh
+    try {
+      await fetch(`${API_BASE}/session/${SESSION_ID}/clear`, { method: 'POST' });
+    } catch (_) { /* non-critical */ }
 
     // Flash
     const flash = document.getElementById('switch-flash');
@@ -576,29 +581,9 @@
     document.getElementById('chat-input').placeholder = 'Message @am1t_rblx';
     document.getElementById('typing-name').textContent = 'am1t_rblx';
 
-    // Re-render existing messages in Discord style
+    // Wipe all messages — start Discord chat completely fresh
     const container = document.getElementById('messages');
-    const oldRows   = container.querySelectorAll('.msg-row:not(.discord-row)');
-    const snapshot  = [];
-
-    oldRows.forEach(row => {
-      const nameEl   = row.querySelector('.msg-name');
-      const bubbleEl = row.querySelector('.msg-bubble');
-      const timeEl   = row.querySelector('.msg-time');
-      if (!bubbleEl) return;
-      snapshot.push({
-        role : row.classList.contains('user') ? 'user' : row.classList.contains('amit') ? 'amit' : 'system',
-        name : nameEl ? nameEl.textContent : '',
-        text : bubbleEl.textContent,
-        time : timeEl  ? timeEl.textContent : now(),
-      });
-    });
-
     container.innerHTML = '';
-    snapshot.forEach(m => {
-      if (m.role === 'system') return; // skip system messages in DC mode
-      appendDiscordMessage(m.role, m.name || (m.role === 'amit' ? 'am1t_rblx' : username), m.text, m.time);
-    });
 
     scrollBottom();
   }
@@ -709,15 +694,17 @@
       const data = await res.json();
 
       if (data.platform_switch_detected && !discordMode) {
+        // 1. Show alert banner
         document.getElementById('alert-banner').classList.add('visible');
-        setTimeout(() => activateDiscordMode(username), 800);
-      }
 
-      // Slight delay so Discord transition finishes before reply appears
-      const delay = data.platform_switch_detected && !discordMode ? 1000 : 0;
-      setTimeout(() => {
+        // 2. Show Amit's reply in the current Roblox chat
+        appendRobloxMessage('amit', 'Amit_Rblx', data.reply);
+
+        // 3. After a beat, wipe everything and switch to Discord
+        setTimeout(() => activateDiscordMode(username), 2000);
+      } else {
         appendMessage('amit', 'am1t_rblx', data.reply);
-      }, delay);
+      }
 
     } catch (err) {
       appendRobloxMessage('system', '', 'Connection error. Try again.');
