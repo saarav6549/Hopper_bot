@@ -85,15 +85,13 @@ def handle_message(body: IncomingMessage) -> BotResponse:
 
     logger.info("Session %s | Platform: %s | Incoming: %r", session_id, platform, user_text[:120])
 
-    # 1. Detect platform-switch attempt
+    # 1. Detect platform-switch attempt (log only — no redirect while Telegram is inactive)
     detection = detect_platform_switch(user_text)
 
     if detection.detected:
         logger.warning(
-            "Session %s | Platform-switch detected → %s", session_id, detection.platform
+            "Session %s | Platform-switch detected → %s (logging only)", session_id, detection.platform
         )
-
-        # Alert the operator once per session
         if not was_alerted(session_id):
             send_operator_alert(
                 session_id=session_id,
@@ -102,21 +100,7 @@ def handle_message(body: IncomingMessage) -> BotResponse:
             )
             mark_alerted(session_id)
 
-        # Return the scripted redirect reply (no LLM call needed here)
-        redirect_reply = build_redirect_reply(current_platform=platform)
-
-        # Still log the exchange in history for continuity
-        append_message(session_id, "user", user_text)
-        append_message(session_id, "assistant", redirect_reply)
-
-        return BotResponse(
-            session_id=session_id,
-            reply=redirect_reply,
-            platform_switch_detected=True,
-            switch_platform=detection.platform,
-        )
-
-    # 2. Normal conversation — forward to GPT-4o persona
+    # 2. All messages — forward to GPT-4.5 persona
     append_message(session_id, "user", user_text)
     history = get_history(session_id)
 
@@ -132,7 +116,8 @@ def handle_message(body: IncomingMessage) -> BotResponse:
     return BotResponse(
         session_id=session_id,
         reply=reply,
-        platform_switch_detected=False,
+        platform_switch_detected=detection.detected,
+        switch_platform=detection.platform,
     )
 
 
