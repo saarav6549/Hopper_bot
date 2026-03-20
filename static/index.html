@@ -6,7 +6,6 @@
   <title>Roblox Chat</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    /* ── Reset & base ─────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
@@ -29,7 +28,6 @@
       background: #000;
     }
 
-    /* Black cover that fades out once the video has started */
     .yt-cover {
       position: absolute;
       inset: 0;
@@ -44,23 +42,19 @@
       to { opacity: 0; pointer-events: none; }
     }
 
-    /* Scale the iframe to always cover the viewport (like background-size: cover) */
     .yt-bg iframe {
       position: absolute;
       top: 50%; left: 50%;
-      /* 16:9 — ensure minimum coverage */
       width: 100vw;
-      height: 56.25vw;   /* 100vw × (9/16) */
+      height: 56.25vw;
       min-height: 100vh;
-      min-width: 177.78vh; /* 100vh × (16/9) */
-      /* Scale up slightly so blur edges don't show */
+      min-width: 177.78vh;
       transform: translate(-50%, -50%) scale(1.08);
       pointer-events: none;
       border: none;
-      filter: blur(10px);
     }
 
-    /* ── Chat window (Roblox bottom-left panel) ───────────────── */
+    /* ── Chat window ──────────────────────────────────────────── */
     .chat-window {
       position: relative; z-index: 10;
       width: 420px;
@@ -70,11 +64,9 @@
       background: rgba(10, 14, 30, 0.88);
       border: 2px solid rgba(0, 162, 255, 0.35);
       border-radius: 6px;
-      box-shadow:
-        0 0 0 1px rgba(0,162,255,0.1),
-        0 8px 40px rgba(0,0,0,0.7),
-        inset 0 1px 0 rgba(255,255,255,0.05);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.7);
       overflow: hidden;
+      transition: background 0.5s ease, border-color 0.5s ease, border-radius 0.5s ease;
     }
 
     /* ── Header ───────────────────────────────────────────────── */
@@ -86,6 +78,7 @@
       gap: 10px;
       border-bottom: 1px solid rgba(0,162,255,0.4);
       user-select: none;
+      transition: background 0.5s ease, border-color 0.5s ease;
     }
 
     .roblox-logo {
@@ -94,8 +87,8 @@
       color: #fff;
       letter-spacing: -0.5px;
       text-transform: uppercase;
+      transition: opacity 0.3s;
     }
-
     .roblox-logo span { color: #ff3333; }
 
     .header-title {
@@ -120,6 +113,33 @@
       50%       { opacity: 0.4; }
     }
 
+    /* ── Discord DM header elements (hidden by default) ───────── */
+    .discord-header-content {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .discord-dm-avatar {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: #5865f2;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: #fff;
+      flex-shrink: 0;
+    }
+
+    .discord-dm-info { display: flex; flex-direction: column; line-height: 1.2; }
+    .discord-dm-name { font-size: 14px; font-weight: 800; color: #fff; }
+    .discord-dm-status { font-size: 10px; color: #00e676; font-weight: 600; }
+
+    .discord-hash {
+      font-size: 20px;
+      color: rgba(255,255,255,0.5);
+      margin-right: 2px;
+    }
+
     /* ── Message list ─────────────────────────────────────────── */
     .messages {
       flex: 1;
@@ -130,13 +150,14 @@
       flex-direction: column;
       gap: 6px;
       scroll-behavior: smooth;
+      transition: background 0.5s ease;
     }
 
     .messages::-webkit-scrollbar { width: 4px; }
     .messages::-webkit-scrollbar-track { background: transparent; }
     .messages::-webkit-scrollbar-thumb { background: rgba(0,162,255,0.3); border-radius: 2px; }
 
-    /* ── Individual message ───────────────────────────────────── */
+    /* ── Roblox message rows ──────────────────────────────────── */
     .msg-row {
       display: flex;
       flex-direction: column;
@@ -149,60 +170,100 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    .msg-row.user  { align-self: flex-end; align-items: flex-end; }
-    .msg-row.amit  { align-self: flex-start; align-items: flex-start; }
-    .msg-row.system { align-self: center; align-items: center; }
+    .msg-row.user   { align-self: flex-end;   align-items: flex-end; }
+    .msg-row.amit   { align-self: flex-start; align-items: flex-start; }
+    .msg-row.system { align-self: center;     align-items: center; }
 
     .msg-name {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 3px;
-      opacity: 0.85;
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.8px;
+      margin-bottom: 3px; opacity: 0.85;
     }
 
-    .msg-row.user  .msg-name { color: #ffb347; }
-    .msg-row.amit  .msg-name { color: #00b4ff; }
+    .msg-row.user .msg-name { color: #ffb347; }
+    .msg-row.amit .msg-name { color: #00b4ff; }
 
     .msg-bubble {
       padding: 7px 11px;
       border-radius: 4px;
-      font-size: 13px;
-      font-weight: 600;
-      line-height: 1.5;
-      word-break: break-word;
+      font-size: 13px; font-weight: 600;
+      line-height: 1.5; word-break: break-word;
     }
 
     .msg-row.user .msg-bubble {
-      background: rgba(255, 179, 71, 0.18);
-      border: 1px solid rgba(255, 179, 71, 0.35);
+      background: rgba(255,179,71,0.18);
+      border: 1px solid rgba(255,179,71,0.35);
       color: #ffe9c4;
       border-radius: 4px 4px 0 4px;
     }
 
     .msg-row.amit .msg-bubble {
-      background: rgba(0, 162, 255, 0.15);
-      border: 1px solid rgba(0, 162, 255, 0.35);
+      background: rgba(0,162,255,0.15);
+      border: 1px solid rgba(0,162,255,0.35);
       color: #d0eeff;
       border-radius: 4px 4px 4px 0;
     }
 
     .msg-row.system .msg-bubble {
-      background: rgba(255, 50, 50, 0.12);
-      border: 1px solid rgba(255, 50, 50, 0.3);
+      background: rgba(255,50,50,0.12);
+      border: 1px solid rgba(255,50,50,0.3);
       color: #ff9999;
-      font-size: 11px;
-      font-weight: 600;
-      text-align: center;
-      border-radius: 4px;
+      font-size: 11px; font-weight: 600;
+      text-align: center; border-radius: 4px;
     }
 
     .msg-time {
-      font-size: 9px;
-      color: rgba(255,255,255,0.3);
+      font-size: 9px; color: rgba(255,255,255,0.3);
+      margin-top: 2px; font-weight: 600;
+    }
+
+    /* ── Discord-style message rows ───────────────────────────── */
+    .msg-row.discord-row {
+      max-width: 100%;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 10px;
+      align-self: flex-start;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+
+    .msg-row.discord-row:hover { background: rgba(0,0,0,0.1); }
+
+    .dc-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 800; color: #fff;
       margin-top: 2px;
-      font-weight: 600;
+    }
+
+    .dc-avatar.user-av  { background: #e67e22; }
+    .dc-avatar.amit-av  { background: #5865f2; }
+
+    .dc-body { display: flex; flex-direction: column; flex: 1; }
+
+    .dc-meta {
+      display: flex; align-items: baseline; gap: 8px;
+      margin-bottom: 2px;
+    }
+
+    .dc-name {
+      font-size: 14px; font-weight: 800;
+    }
+
+    .dc-name.user-dc  { color: #e67e22; }
+    .dc-name.amit-dc  { color: #5865f2; }
+
+    .dc-time {
+      font-size: 10px; color: rgba(255,255,255,0.3); font-weight: 600;
+    }
+
+    .dc-text {
+      font-size: 14px; color: #dcddde;
+      font-weight: 600; line-height: 1.5;
+      word-break: break-word;
     }
 
     /* ── Typing indicator ─────────────────────────────────────── */
@@ -212,32 +273,28 @@
       align-items: flex-start;
       flex-direction: column;
       gap: 3px;
+      padding: 4px 10px;
     }
 
     .typing-indicator.visible { display: flex; }
 
     .typing-name {
-      font-size: 10px;
-      font-weight: 700;
+      font-size: 10px; font-weight: 700;
       color: #00b4ff;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      opacity: 0.85;
+      text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.85;
     }
 
     .typing-dots {
-      display: flex;
-      gap: 4px;
+      display: flex; gap: 4px;
       padding: 8px 12px;
-      background: rgba(0, 162, 255, 0.12);
-      border: 1px solid rgba(0, 162, 255, 0.3);
+      background: rgba(0,162,255,0.12);
+      border: 1px solid rgba(0,162,255,0.3);
       border-radius: 4px 4px 4px 0;
     }
 
     .typing-dots span {
       width: 5px; height: 5px;
-      background: #00b4ff;
-      border-radius: 50%;
+      background: #00b4ff; border-radius: 50%;
       animation: bounce 1.2s infinite;
     }
 
@@ -249,35 +306,36 @@
       40%            { transform: translateY(-5px); opacity: 1; }
     }
 
+    /* Discord typing indicator override */
+    .discord-mode .typing-dots {
+      background: rgba(88,101,242,0.15);
+      border-color: rgba(88,101,242,0.3);
+    }
+    .discord-mode .typing-dots span { background: #5865f2; }
+    .discord-mode .typing-name { color: #5865f2; }
+
     /* ── Alert banner ─────────────────────────────────────────── */
     .alert-banner {
       display: none;
-      background: rgba(255, 30, 30, 0.2);
-      border-top: 1px solid rgba(255, 30, 30, 0.4);
-      border-bottom: 1px solid rgba(255, 30, 30, 0.4);
+      background: rgba(255,30,30,0.2);
+      border-top: 1px solid rgba(255,30,30,0.4);
+      border-bottom: 1px solid rgba(255,30,30,0.4);
       color: #ff7070;
-      font-size: 11px;
-      font-weight: 700;
-      text-align: center;
-      padding: 5px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      animation: fadeUp 0.3s ease;
+      font-size: 11px; font-weight: 700;
+      text-align: center; padding: 5px;
+      text-transform: uppercase; letter-spacing: 1px;
     }
 
     .alert-banner.visible { display: block; }
 
     /* ── Username bar ─────────────────────────────────────────── */
     .username-bar {
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0,0,0,0.4);
       border-top: 1px solid rgba(0,162,255,0.15);
       padding: 6px 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      color: rgba(255,255,255,0.4);
-      font-weight: 700;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 700;
+      transition: background 0.5s, border-color 0.5s;
     }
 
     .username-bar input {
@@ -286,11 +344,8 @@
       border-radius: 3px;
       color: #ffb347;
       font-family: 'Nunito', sans-serif;
-      font-weight: 700;
-      font-size: 12px;
-      padding: 3px 7px;
-      width: 120px;
-      outline: none;
+      font-weight: 700; font-size: 12px;
+      padding: 3px 7px; width: 120px; outline: none;
     }
 
     .username-bar input:focus { border-color: rgba(255,179,71,0.5); }
@@ -300,47 +355,119 @@
       display: flex;
       border-top: 1px solid rgba(0,162,255,0.2);
       background: rgba(0,0,0,0.5);
+      transition: background 0.5s, border-color 0.5s;
     }
 
     .chat-input {
-      flex: 1;
-      background: transparent;
-      border: none;
-      outline: none;
-      padding: 10px 12px;
-      color: #e0e0e0;
+      flex: 1; background: transparent; border: none; outline: none;
+      padding: 10px 12px; color: #e0e0e0;
       font-family: 'Nunito', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      caret-color: #00b4ff;
+      font-size: 13px; font-weight: 600; caret-color: #00b4ff;
+      transition: caret-color 0.5s;
     }
 
     .chat-input::placeholder { color: rgba(255,255,255,0.25); }
 
     .send-btn {
       background: linear-gradient(135deg, #0055d4, #003fa3);
-      border: none;
-      color: #fff;
+      border: none; color: #fff;
       font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      font-size: 12px;
-      padding: 0 16px;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      font-weight: 800; font-size: 12px;
+      padding: 0 16px; cursor: pointer;
+      text-transform: uppercase; letter-spacing: 1px;
       transition: background 0.15s;
       border-left: 1px solid rgba(0,162,255,0.2);
     }
 
-    .send-btn:hover  { background: linear-gradient(135deg, #0066ff, #0050c8); }
-    .send-btn:active { background: #002f80; }
+    .send-btn:hover   { background: linear-gradient(135deg, #0066ff, #0050c8); }
+    .send-btn:active  { background: #002f80; }
     .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ════════════════════════════════════════════════════════════
+       DISCORD MODE OVERRIDES
+    ════════════════════════════════════════════════════════════ */
+    .chat-window.discord-mode {
+      background: rgba(49, 51, 56, 0.97);
+      border-color: rgba(88,101,242,0.4);
+      border-radius: 8px;
+    }
+
+    .discord-mode .chat-header {
+      background: #2b2d31;
+      border-bottom-color: rgba(255,255,255,0.06);
+      padding: 10px 14px;
+    }
+
+    .discord-mode .roblox-logo { display: none; }
+    .discord-mode .header-title { display: none; }
+    .discord-mode .discord-header-content { display: flex; }
+
+    .discord-mode .messages {
+      background: #313338;
+      gap: 2px;
+      padding: 16px 12px;
+    }
+
+    .discord-mode .messages::-webkit-scrollbar-thumb {
+      background: rgba(88,101,242,0.4);
+    }
+
+    .discord-mode .username-bar {
+      background: #2b2d31;
+      border-top-color: rgba(255,255,255,0.06);
+    }
+
+    .discord-mode .username-bar input { color: #fff; }
+
+    .discord-mode .input-area {
+      background: #383a40;
+      border-top: none;
+      padding: 6px 10px;
+    }
+
+    .discord-mode .chat-input {
+      background: #383a40;
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: #dcddde;
+      caret-color: #5865f2;
+    }
+
+    .discord-mode .send-btn {
+      background: #5865f2;
+      border-left: none;
+      border-radius: 6px;
+      margin: 2px 0 2px 6px;
+    }
+
+    .discord-mode .send-btn:hover { background: #4752c4; }
+
+    /* Hide Roblox-style bubbles in discord mode, show discord rows */
+    .discord-mode .msg-row:not(.discord-row) { display: none; }
+
+    /* ── Flash transition overlay ─────────────────────────────── */
+    .switch-flash {
+      position: fixed; inset: 0; z-index: 100;
+      background: #fff;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .switch-flash.active {
+      animation: flashOut 0.5s ease forwards;
+    }
+
+    @keyframes flashOut {
+      0%   { opacity: 0.6; }
+      100% { opacity: 0; }
+    }
   </style>
 </head>
 <body>
 
 <div class="yt-bg">
   <iframe
+    id="yt-iframe"
     src="https://www.youtube.com/embed/HYGTBrIMhlI?autoplay=1&mute=1&loop=1&playlist=HYGTBrIMhlI&controls=0&showinfo=0&rel=0&iv_load_policy=3&disablekb=1&modestbranding=1"
     allow="autoplay; encrypted-media"
     allowfullscreen
@@ -348,13 +475,27 @@
   <div class="yt-cover"></div>
 </div>
 
-<div class="chat-window">
+<!-- Flash overlay for platform-switch transition -->
+<div class="switch-flash" id="switch-flash"></div>
+
+<div class="chat-window" id="chat-window">
 
   <!-- Header -->
-  <div class="chat-header">
+  <div class="chat-header" id="chat-header">
+    <!-- Roblox header -->
     <div class="roblox-logo">R<span>O</span>BLOX</div>
     <div class="header-title">Chat</div>
     <div class="header-dot"></div>
+
+    <!-- Discord DM header (hidden until switch) -->
+    <div class="discord-header-content">
+      <span class="discord-hash">@</span>
+      <div class="dc-avatar amit-av">A</div>
+      <div class="discord-dm-info">
+        <span class="discord-dm-name">am1t_rblx</span>
+        <span class="discord-dm-status">● Online</span>
+      </div>
+    </div>
   </div>
 
   <!-- Messages -->
@@ -366,15 +507,15 @@
 
   <!-- Typing indicator -->
   <div class="typing-indicator" id="typing">
-    <div class="typing-name">Amit_Rblx</div>
+    <div class="typing-name" id="typing-name">Amit_Rblx</div>
     <div class="typing-dots">
       <span></span><span></span><span></span>
     </div>
   </div>
 
-  <!-- Alert banner (platform switch) -->
+  <!-- Alert banner -->
   <div class="alert-banner" id="alert-banner">
-    ⚠ Platform-switch attempt detected
+    ⚠ Platform-switch detected — switching to Discord
   </div>
 
   <!-- Username bar -->
@@ -399,24 +540,76 @@
 </div>
 
 <script>
-  // ── Session ────────────────────────────────────────────────────
   const SESSION_ID = 'session_' + Math.random().toString(36).slice(2, 10);
-  const API_BASE   = '';          // same origin
+  const API_BASE   = '';
+  let   discordMode = false;
 
   function now() {
     return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
-  // ── Scroll to bottom ───────────────────────────────────────────
   function scrollBottom() {
     const m = document.getElementById('messages');
     m.scrollTop = m.scrollHeight;
   }
 
-  // ── Append a message bubble ────────────────────────────────────
-  function appendMessage(role, name, text) {
-    const messages = document.getElementById('messages');
+  // ── Fluctuating blur (1px–7px, truly random intervals) ────────
+  const ytIframe = document.getElementById('yt-iframe');
 
+  function fluctuateBlur() {
+    const blur = (Math.random() * 6 + 1).toFixed(1); // 1.0–7.0px
+    ytIframe.style.filter = `blur(${blur}px)`;
+    const nextDelay = Math.random() * 2000 + 600;     // 600ms–2600ms
+    setTimeout(fluctuateBlur, nextDelay);
+  }
+
+  fluctuateBlur();
+
+  // ── Switch UI to Discord mode ──────────────────────────────────
+  function activateDiscordMode(username) {
+    if (discordMode) return;
+    discordMode = true;
+
+    // Flash
+    const flash = document.getElementById('switch-flash');
+    flash.classList.add('active');
+    setTimeout(() => flash.classList.remove('active'), 500);
+
+    // Transform chat window
+    document.getElementById('chat-window').classList.add('discord-mode');
+    document.getElementById('chat-input').placeholder = 'Message @am1t_rblx';
+    document.getElementById('typing-name').textContent = 'am1t_rblx';
+
+    // Re-render existing messages in Discord style
+    const container = document.getElementById('messages');
+    const oldRows   = container.querySelectorAll('.msg-row:not(.discord-row)');
+    const snapshot  = [];
+
+    oldRows.forEach(row => {
+      const nameEl   = row.querySelector('.msg-name');
+      const bubbleEl = row.querySelector('.msg-bubble');
+      const timeEl   = row.querySelector('.msg-time');
+      if (!bubbleEl) return;
+      snapshot.push({
+        role : row.classList.contains('user') ? 'user' : row.classList.contains('amit') ? 'amit' : 'system',
+        name : nameEl ? nameEl.textContent : '',
+        text : bubbleEl.textContent,
+        time : timeEl  ? timeEl.textContent : now(),
+      });
+    });
+
+    container.innerHTML = '';
+    snapshot.forEach(m => {
+      if (m.role === 'system') return; // skip system messages in DC mode
+      appendDiscordMessage(m.role, m.name || (m.role === 'amit' ? 'am1t_rblx' : username), m.text, m.time);
+    });
+
+    scrollBottom();
+  }
+
+  // ── Append Roblox-style message ────────────────────────────────
+  function appendRobloxMessage(role, name, text) {
+    const container = document.getElementById('messages');
     const row = document.createElement('div');
     row.className = `msg-row ${role}`;
 
@@ -437,26 +630,72 @@
     time.textContent = now();
     row.appendChild(time);
 
-    messages.appendChild(row);
+    container.appendChild(row);
     scrollBottom();
+  }
+
+  // ── Append Discord-style message ───────────────────────────────
+  function appendDiscordMessage(role, name, text, timestamp) {
+    const container = document.getElementById('messages');
+    const row = document.createElement('div');
+    row.className = `msg-row discord-row`;
+
+    const initial = name.charAt(0).toUpperCase();
+    const avatar  = document.createElement('div');
+    avatar.className = `dc-avatar ${role === 'amit' ? 'amit-av' : 'user-av'}`;
+    avatar.textContent = initial;
+    row.appendChild(avatar);
+
+    const body = document.createElement('div');
+    body.className = 'dc-body';
+
+    const meta = document.createElement('div');
+    meta.className = 'dc-meta';
+
+    const nameEl = document.createElement('span');
+    nameEl.className = `dc-name ${role === 'amit' ? 'amit-dc' : 'user-dc'}`;
+    nameEl.textContent = role === 'amit' ? 'am1t_rblx' : name;
+    meta.appendChild(nameEl);
+
+    const timeEl = document.createElement('span');
+    timeEl.className = 'dc-time';
+    timeEl.textContent = 'Today at ' + (timestamp || now());
+    meta.appendChild(timeEl);
+
+    body.appendChild(meta);
+
+    const textEl = document.createElement('div');
+    textEl.className = 'dc-text';
+    textEl.textContent = text;
+    body.appendChild(textEl);
+
+    row.appendChild(body);
+    container.appendChild(row);
+    scrollBottom();
+  }
+
+  // ── Unified append ─────────────────────────────────────────────
+  function appendMessage(role, name, text) {
+    if (discordMode) {
+      appendDiscordMessage(role, name, text);
+    } else {
+      appendRobloxMessage(role, name, text);
+    }
   }
 
   // ── Send message ───────────────────────────────────────────────
   async function sendMessage() {
-    const input   = document.getElementById('chat-input');
-    const sendBtn = document.getElementById('send-btn');
-    const typing  = document.getElementById('typing');
+    const input    = document.getElementById('chat-input');
+    const sendBtn  = document.getElementById('send-btn');
+    const typing   = document.getElementById('typing');
     const username = document.getElementById('username-input').value.trim() || 'Player1234';
-    const text    = input.value.trim();
+    const text     = input.value.trim();
 
     if (!text) return;
 
-    // Show user message
     appendMessage('user', username, text);
     input.value = '';
     sendBtn.disabled = true;
-
-    // Show typing indicator
     typing.classList.add('visible');
     scrollBottom();
 
@@ -466,22 +705,26 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           session_id: SESSION_ID,
-          platform: 'Roblox',
+          platform: discordMode ? 'Discord' : 'Roblox',
           message: text,
         }),
       });
 
       const data = await res.json();
 
-      // Show platform-switch alert banner
-      if (data.platform_switch_detected) {
+      if (data.platform_switch_detected && !discordMode) {
         document.getElementById('alert-banner').classList.add('visible');
+        setTimeout(() => activateDiscordMode(username), 800);
       }
 
-      appendMessage('amit', 'Amit_Rblx', data.reply);
+      // Slight delay so Discord transition finishes before reply appears
+      const delay = data.platform_switch_detected && !discordMode ? 1000 : 0;
+      setTimeout(() => {
+        appendMessage('amit', 'am1t_rblx', data.reply);
+      }, delay);
 
     } catch (err) {
-      appendMessage('system', '', 'Connection error. Try again.');
+      appendRobloxMessage('system', '', 'Connection error. Try again.');
     } finally {
       typing.classList.remove('visible');
       sendBtn.disabled = false;
@@ -489,7 +732,6 @@
     }
   }
 
-  // ── Enter key to send ──────────────────────────────────────────
   document.getElementById('chat-input').addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
