@@ -342,11 +342,6 @@
     <div class="msg-row system">
       <div class="msg-bubble">Welcome to Roblox! You joined the game.</div>
     </div>
-    <div class="msg-row amit">
-      <div class="msg-name">Amit_Rblx</div>
-      <div class="msg-bubble">heyyy!! wanna play tower of hell with me lol im so bad at it 😭</div>
-      <div class="msg-time" id="init-time"></div>
-    </div>
   </div>
 
   <!-- Typing indicator -->
@@ -387,9 +382,6 @@
   // ── Session ────────────────────────────────────────────────────
   const SESSION_ID = 'session_' + Math.random().toString(36).slice(2, 10);
   const API_BASE   = '';          // same origin
-
-  // ── Init timestamp ─────────────────────────────────────────────
-  document.getElementById('init-time').textContent = now();
 
   function now() {
     return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });

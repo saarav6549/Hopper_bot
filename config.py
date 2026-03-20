@@ -22,7 +22,7 @@ TELEGRAM_BOT_USERNAME: str = os.getenv("TELEGRAM_BOT_USERNAME", "@HopperBot")
 TELEGRAM_ENABLED: bool = bool(TELEGRAM_BOT_TOKEN and TELEGRAM_OPERATOR_CHAT_ID)
 
 # GPT model
-GPT_MODEL: str = "gpt-4.5"
+GPT_MODEL: str = "gpt-4.5-preview"
 
 # Maximum conversation turns kept in memory per session
 MAX_HISTORY_TURNS: int = 40
